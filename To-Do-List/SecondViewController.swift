@@ -8,18 +8,44 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController,UITextFieldDelegate {
+    
+    @IBOutlet weak var userTxtFld: UITextField!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+  
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func addBtnPrssd(_ sender: Any) {
+        
+        var items:[String] = [String]()
+        let itemObjects = UserDefaults.standard.object(forKey: "items")
+        if let item1 = itemObjects as? [String] {
+            if !(userTxtFld.text?.isEmpty)!{
+                items = item1
+                items.append(userTxtFld.text!)
+                UserDefaults.standard.set(items, forKey: "items")
+            }
+        }else {
+            if !((userTxtFld.text?.isEmpty)!){
+                items = [userTxtFld.text!]
+                UserDefaults.standard.set(items, forKey: "items")
+            }
+        }
+        self.userTxtFld.text = nil
+        self.userTxtFld.endEditing(true)
     }
-
-
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
